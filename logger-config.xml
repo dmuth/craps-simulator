@@ -1,0 +1,11 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <appender name="default" class="LoggerAppenderEcho">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%relative s [%-5pid] %-5level %msg%n" />
+        </layout>
+    </appender>
+    <root>
+        <appender_ref ref="default" />
+    </root>
+</configuration>
+
