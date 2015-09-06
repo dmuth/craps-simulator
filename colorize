@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# This script is used to add colors to our logging messages
+#
+# Messages are read in on stdin and written to stdout.
+#
+
+
+DEFAULT=$(echo -e '\033[39m')
+GREEN=$(echo -e '\033[32m')
+YELLOW=$(echo -e '\033[33m')
+RED=$(echo -e '\033[31m')
+
+
+sed \
+	-e "s/\(.* INFO .*\)/${GREEN}\1/" \
+	-e "s/\(.* WARN .*\)/${YELLOW}\1/" \
+	-e "s/\(.* ERROR .*\)/${RED}\1/" \
+	-e "s/\(.*\)/${DEFAULT}\1/"
+
+
