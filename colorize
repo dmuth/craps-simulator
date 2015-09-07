@@ -10,9 +10,11 @@ DEFAULT=$(echo -e '\033[39m')
 GREEN=$(echo -e '\033[32m')
 YELLOW=$(echo -e '\033[33m')
 RED=$(echo -e '\033[31m')
+CYAN=$(echo -e '\033[36m')
 
 
 sed \
+	-e "s/\(.* DEBUG .*\)/${CYAN}\1/" \
 	-e "s/\(.* INFO .*\)/${GREEN}\1/" \
 	-e "s/\(.* WARN .*\)/${YELLOW}\1/" \
 	-e "s/\(.* ERROR .*\)/${RED}\1/" \
