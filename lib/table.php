@@ -43,12 +43,10 @@ class Table {
 	* Our constructor.
 	*
 	* @param object $logger Our logger.
-	* @param integer $num_games How many games to play?
 	*/
-	function __construct($logger, $num_games) {
+	function __construct($logger) {
 
 		$this->logger = $logger;
-		$this->num_games = $num_games;
 		$this->players = array();
 		$this->debug = array();
 
@@ -76,19 +74,36 @@ class Table {
 
 
 	/**
+	* Play multiple games of craps
+	*
+	* @param integer $num_games How many games to play?
+	*
+	*/
+	function play($num_games) {
+
+		while (true) {
+
+			//
+			// Did we run out of games to play?
+			//
+			if ($num_games <= 0) {
+				break;
+			}
+
+			$this->playGame();
+			$num_games--;
+			$this->stats["num_games"]++;
+
+		}
+
+	} // End of play()
+
+
+	/**
 	* Play a game of craps.
 	*
-	* @return boolean True is returned on success, false is returned
-	*	if we were unable to start the game.
 	*/
-	function play() {
-
-		//
-		// Did we run out of games to play?
-		//
-		if ($this->num_games <= 0) {
-			return(false);
-		}
+	private function playGame() {
 
 		while (true) {
 			$roll = $this->roll();
@@ -97,10 +112,10 @@ class Table {
 			}	
 		}
 
-		$this->num_games--;
-		return(true);
+		return(null);
 
-	} // End of play()
+	} // End of playGame()
+
 
 	/**
 	* Make a dice roll.
