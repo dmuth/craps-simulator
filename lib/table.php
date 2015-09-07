@@ -183,7 +183,6 @@ class Table {
 			//
 			// This is our come out roll
 			//
-			$this->stats["num_games"]++;
 			$this->sendPlayerEvent(PLAYER_NEW_GAME);
 			$this->sendPlayerEvent(PLAYER_BET);
 
