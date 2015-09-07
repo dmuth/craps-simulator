@@ -6,9 +6,9 @@ namespace Craps;
 //
 // Events we can send to a player
 //
-define("NEW_GAME", "new game");
-define("BET", "bet");
-define("BET_ODDS", "taking odds");
+define("PLAYER_NEW_GAME", "new game");
+define("PLAYER_BET", "bet");
+define("PLAYER_BET_ODDS", "taking odds");
 define("PLAYER_WIN", "I won!");
 define("PLAYER_LOSE", "I lost");
 
@@ -74,7 +74,7 @@ class Player {
 		$this->logger->debug("Received event: $event");
 		$args = func_get_args();
 
-		if ($event == NEW_GAME) {
+		if ($event == PLAYER_NEW_GAME) {
 			$this->stats["num_games"]++;
 			$this->roll = "";
 		}
@@ -82,10 +82,10 @@ class Player {
 		//
 		// Opportunity to place a bet or take odds
 		//
-		if ($event == BET) {
+		if ($event == PLAYER_BET) {
 			$this->placeBet();
 
-		} else if ($event == BET_ODDS) {
+		} else if ($event == PLAYER_BET_ODDS) {
 			$roll = $args[1];
 			$this->placeBetOdds($roll);
 

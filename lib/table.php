@@ -6,14 +6,14 @@ namespace Craps;
 //
 // Our types of rolls/game states
 //
-define("COME_OUT", "come out roll");
-define("POINT", "point roll");
+define("TABLE_COME_OUT", "come out roll");
+define("TABLE_POINT", "point roll");
 
 //
 // The results of rolls
 //
-define("WIN", "win!");
-define("LOSE", "lose");
+define("TABLE_WIN", "win!");
+define("TABLE_LOSE", "lose");
 
 
 /**
@@ -112,16 +112,16 @@ class Table {
 		// First roll of a new game?
 		//
 		if (!$this->state) {
-			$this->state = COME_OUT;
+			$this->state = TABLE_COME_OUT;
 		}
 
-		if ($this->state == COME_OUT) {
+		if ($this->state == TABLE_COME_OUT) {
 			//
 			// This is our come out roll
 			//
 			$this->stats["num_games"]++;
-			$this->sendPlayerEvent(NEW_GAME);
-			$this->sendPlayerEvent(BET);
+			$this->sendPlayerEvent(PLAYER_NEW_GAME);
+			$this->sendPlayerEvent(PLAYER_BET);
 
 			//
 			// Assign a UUID to this game.
@@ -134,20 +134,20 @@ class Table {
 
 			if (in_array($roll, array(2, 3, 12))) {
 				$this->logger->info("Crapped out");
-				$retval = LOSE;
+				$retval = TABLE_LOSE;
 				$this->stats["losses"]++;
 				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if (in_array($roll, array(7, 11))) {
 				$this->logger->info("Winner!");
-				$retval = WIN;
+				$retval = TABLE_WIN;
 				$this->stats["wins"]++;
 				$this->sendPlayerEvent(PLAYER_WIN);
 
 			} else {
 				$this->logger->info("The point is now: $roll");
 				$this->point = $roll;
-				$this->sendPlayerEvent(BET_ODDS, $roll);
+				$this->sendPlayerEvent(PLAYER_BET_ODDS, $roll);
 
 			}
 
@@ -158,13 +158,13 @@ class Table {
 			//
 			if ($roll == 7) {
 				$this->logger->info("Out!");
-				$retval = LOSE;
+				$retval = TABLE_LOSE;
 				$this->stats["losses"]++;
 				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if ($roll == $this->point) {
 				$this->logger->info("Winner!");
-				$retval = WIN;
+				$retval = TABLE_WIN;
 				$this->stats["wins"]++;
 				$this->sendPlayerEvent(PLAYER_WIN);
 
@@ -186,15 +186,15 @@ class Table {
 		$this->logger->debug("Old state: " . $this->state);
 		$this->logger->debug("Result: $result");
 
-		if ($result == WIN) {
-			$this->state = COME_OUT;
+		if ($result == TABLE_WIN) {
+			$this->state = TABLE_COME_OUT;
 
-		} else if ($result == LOSE) {
-			$this->state = COME_OUT;
+		} else if ($result == TABLE_LOSE) {
+			$this->state = TABLE_COME_OUT;
 
 		} else {
-			if ($this->state == COME_OUT) {
-				$this->state = POINT;
+			if ($this->state == TABLE_COME_OUT) {
+				$this->state = TABLE_POINT;
 			}
 
 		}
