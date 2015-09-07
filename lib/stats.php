@@ -58,17 +58,17 @@ class Stats {
 			. "Table Stats:\n"
 			. "============\n"
 			. "\n"
-			. "%20s: %5d\n"
-			. "%20s: %5d\n"
-			. "%20s: $this->green%5d$this->default\n"
-			. "%20s: $this->red%5d$this->default\n"
-			. "%20s: \n"
-			. "%20s: %5d    %5s: %5d\n"
-			. "%20s: %5d    %5s: %5d\n"
-			. "%20s: %5d    %5s: %5d\n"
-			. "%20s: %5d    %5s: %5d\n"
-			. "%20s: %5d    %5s: %5d\n"
-			. "%36s: %5d\n"
+			. "%15s: %5d\n"
+			. "%15s: %5d\n"
+			. "%15s: $this->green%5d$this->default\n"
+			. "%15s: $this->red%5d$this->default\n"
+			. "%15s: \n"
+			. "%15s: %5d    %5s: %5d\n"
+			. "%15s: %5d    %5s: %5d\n"
+			. "%15s: %5d    %5s: %5d\n"
+			. "%15s: %5d    %5s: %5d\n"
+			. "%15s: %5d    %5s: %5d\n"
+			. "%31s: %5d\n"
 			. "\n",
 			"Games Played",
 			$stats["num_games"],
@@ -97,12 +97,37 @@ class Stats {
 	*/
 	function printStatsPlayers($players) {
 
+		$report = "Player Stats:\n"
+			. "=============\n"
+			;
+
 		foreach ($players as $key => $value) {
-			$this->logger->info("Player: " . json_encode($value->getStats()));
+			//$this->logger->info("Player: " . json_encode($value->getStats()));
+			$stats = $value->getStats();
+
+			$report .= sprintf(""
+				. "%15s: %20s\n"
+				. "%15s: %10d\n"
+				. "%15s: %10d\n"
+				. "%15s: %10d\n"
+				. "%15s: $this->green%10.2f$this->default\n"
+				. "%15s: $this->red%10.2f$this->default\n"
+				. "%15s: %10.2f\n"
+				. "\n",
+				"Name", $stats["name"],
+				"Games Played", $stats["stats"]["num_games"],
+				"Wins", $stats["stats"]["wins"],
+				"Losses", $stats["stats"]["losses"],
+				"Amount Won", $stats["stats"]["amount_won"],
+				"Amount Lost", $stats["stats"]["amount_lost"],
+				"Balance", $stats["balance"]
+				);
+
 		}
 
-	} // End of printStatsPlayer()
+		print $report;
 
+	} // End of printStatsPlayer()
 
 
 } // End of Stats class
