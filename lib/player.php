@@ -160,26 +160,26 @@ class Player {
 	private function payout() {
 
 		$bet = $this->strategy["bet"];
-		$amount = $bet * 2;
+		$amount = $bet;
 		$this->logger->info("Received payout of $${amount} (Player $this->name)");
-		$this->balance += $amount;
+		$this->balance += $bet + $amount;
 		$this->stats["amount_won"] += $amount;
 
 		if ($this->strategy["take_odds"] && $this->roll) {
 			if ($this->roll == 4 || $this->roll == 10) {
-				$amount = $bet * (2/1);
+				$amount = $bet * (2/1) - $bet;
 
 			} else if ($this->roll == 5 || $this->roll == 9) {
-				$amount = $bet * (3/2);
+				$amount = $bet * (3/2) - $bet;
 
 			} else if ($this->roll == 6 || $this->roll == 8) {
-				$amount = $bet * (6/5);
+				$amount = $bet * (6/5) - $bet;
 
 			}
 
 			$this->logger->info(sprintf("Oh, we took odds on point of %s as well! Here's an extra $%.2f! (Player $this->name)", 
 				$this->roll, $amount));
-			$this->balance += $amount;
+			$this->balance += $bet + $amount;
 			$this->stats["amount_won"] += $amount;
 
 		}
