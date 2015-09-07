@@ -119,7 +119,7 @@ class Player {
 
 		$this->balance -= $amount;
 		$this->amount_bet = $amount;
-		$this->logger->info("Placed bet of $${amount} on Pass");
+		$this->logger->info("Placed bet of $${amount} on Pass (Player $this->name)");
 		return(true);
 
 	} // End of placeBet()
@@ -141,14 +141,14 @@ class Player {
 
 		$amount = $this->strategy["bet"];
 		if ($amount > $this->balance) {
-			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out!");
+			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out! (Player $this->name)");
 			return(false);
 		}
 
 		$this->roll = $roll;
 		$this->balance -= $amount;
 		$this->amount_bet += $amount;
-		$this->logger->info("Took odds of $${amount} on point $roll");
+		$this->logger->info("Took odds of $${amount} on point $roll (Player $this->name)");
 		return(true);
 
 	} // End of placeBetOdds()
@@ -161,7 +161,7 @@ class Player {
 
 		$bet = $this->strategy["bet"];
 		$amount = $bet * 2;
-		$this->logger->info("Received payout of $${amount}");
+		$this->logger->info("Received payout of $${amount} (Player $this->name)");
 		$this->balance += $amount;
 		$this->stats["amount_won"] += $amount;
 
@@ -177,7 +177,7 @@ class Player {
 
 			}
 
-			$this->logger->info(sprintf("Oh, we took odds on point of %s as well! Here's an extra $%.2f!", 
+			$this->logger->info(sprintf("Oh, we took odds on point of %s as well! Here's an extra $%.2f! (Player $this->name)", 
 				$this->roll, $amount));
 			$this->balance += $amount;
 			$this->stats["amount_won"] += $amount;
