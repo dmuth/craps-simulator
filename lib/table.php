@@ -25,6 +25,7 @@ class Table {
 	var $logger;
 	var $state;
 	var $point;
+	var $game_id;
 
 	//
 	// Keep track of statistics for this game.
@@ -41,9 +42,23 @@ class Table {
 		$this->logger = $logger;
 
 		$this->stats = array(
+			"num_games" => 0,
 			"num_rolls" => 0,
 			"wins" => 0,
 			"losses" => 0,
+			"dice_rolls" => array(
+				2 => 0,
+				3 => 0,
+				4 => 0,
+				5 => 0,
+				6 => 0,
+				7 => 0,
+				8 => 0,
+				9 => 0,
+				10 => 0,
+				11 => 0,
+				12 => 0,
+				),
 			);
 
 	}
@@ -59,6 +74,7 @@ class Table {
 		$retval = $this->rollDie() + $this->rollDie();
 		$this->logger->info("Roll: $retval");
 		$this->stats["num_rolls"]++;
+		$this->stats["dice_rolls"][$retval]++;
 
 		$result = $this->checkRoll($retval);
 		$this->updateState($result);
@@ -101,6 +117,17 @@ class Table {
 			//
 			// This is our come out roll
 			//
+			$this->stats["num_games"]++;
+
+			//
+			// Assign a UUID to this game.
+			// Sure, we could use an autoincrementing integer, but in
+			// the real world, we might have a situation where we have
+			// many tables, and we'd want a UUID for each.
+			//
+			$this->game_id = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
+			$this->logger->debug("Assigned game ID: " . $this->game_id);
+
 			if (in_array($roll, array(2, 3, 12))) {
 				$this->logger->info("Crapped out");
 				$retval = LOSE;
@@ -181,6 +208,14 @@ class Table {
 	*/
 	function getStats() {
 		return($this->stats);
+	}
+
+
+	/**
+	* Return the ID for the current game.
+	*/
+	function getGameId() {
+		return($this->game_id);
 	}
 
 
