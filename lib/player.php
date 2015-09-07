@@ -39,6 +39,11 @@ class Player {
 	//
 	var $stats;
 
+	//
+	// Set to true if we have too little money to place any bets
+	//
+	var $bankrupt;
+
 
 	/**
 	* Our constructor.
@@ -74,6 +79,14 @@ class Player {
 		$this->logger->debug("Received event: $event");
 		$args = func_get_args();
 
+		//
+		// If we're bankrupt, full stop here.  We shouldn't process any 
+		// events after this, as they all relate to gameplay.
+		//
+		if ($this->bankrupt) {
+			return(null);
+		}
+
 		if ($event == PLAYER_NEW_GAME) {
 			$this->stats["num_games"]++;
 			$this->roll = "";
@@ -93,11 +106,9 @@ class Player {
 
 		if ($event == PLAYER_WIN) {
 			$this->payout();
-			$this->stats["wins"]++;
 
 		} else if ($event == PLAYER_LOSE) {
-			$this->stats["losses"]++;
-			$this->stats["amount_lost"] += $this->amount_bet;
+			$this->loss();
 
 		}
 
@@ -114,6 +125,7 @@ class Player {
 		$amount = $this->strategy["bet"];
 		if ($amount > $this->balance) {
 			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out!");
+			$this->bankrupt = true;
 			return(false);
 		}
 
@@ -133,7 +145,7 @@ class Player {
 	* @return boolean True if a bet is successfully, placed, false otherwise.
 	*
 	*/
-	function placeBetOdds($roll) {
+	private function placeBetOdds($roll) {
 
 		if (!$this->strategy["take_odds"]) {
 			return(null);
@@ -184,7 +196,20 @@ class Player {
 
 		}
 
+		$this->stats["wins"]++;
+
 	} // End of payout()
+
+
+	/**
+	* Handle a player who lost.
+	*/
+	function loss() {
+
+		$this->stats["losses"]++;
+		$this->stats["amount_lost"] += $this->amount_bet;
+
+	} // End of loss()
 
 
 	/**
