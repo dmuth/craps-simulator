@@ -88,18 +88,7 @@ class Player {
 		}
 
 		if ($event == PLAYER_NEW_GAME) {
-
-			if ($this->strategy["bet"] > $this->balance) {
-				$this->logger->info(sprintf("Our balance (%.2f) can't cover betting %d, bailing out!", 
-				$this->balance, $this->strategy["bet"]
-				));
-				$this->bankrupt = true;
-				return(false);
-			}
-
-
-			$this->stats["num_games"]++;
-			$this->roll = "";
+			$this->newGame();
 		}
 
 		//
@@ -123,6 +112,27 @@ class Player {
 		}
 
 	}
+
+
+	/**
+	* Handle starting a new game.
+	*/
+	private function newGame() {
+
+		if ($this->strategy["bet"] > $this->balance) {
+			$this->logger->info(sprintf("Our balance (%.2f) can't cover betting %d, bailing out!", 
+			$this->balance, $this->strategy["bet"]
+			));
+
+			$this->bankrupt = true;
+			return(false);
+
+		}
+
+		$this->stats["num_games"]++;
+		$this->roll = "";
+
+	} // End of newGame()
 
 
 	/**
