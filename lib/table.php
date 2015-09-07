@@ -80,6 +80,10 @@ class Table {
 	function roll() {
 
 		$retval = $this->rollDie() + $this->rollDie();
+
+		//
+		// Are we overriding the roll with a debug value?
+		//
 		if (isset($this->debug["rolls"])) {
 			if (count($this->debug["rolls"])) {
 				$retval = array_shift($this->debug["rolls"]);
