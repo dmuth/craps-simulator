@@ -147,7 +147,7 @@ class Table {
 			} else {
 				$this->logger->info("The point is now: $roll");
 				$this->point = $roll;
-				$this->sendPlayerEvent(BET_ODDS);
+				$this->sendPlayerEvent(BET_ODDS, $roll);
 
 			}
 
@@ -244,7 +244,7 @@ class Table {
 	function sendPlayerEvent($event) {
 
 		foreach ($this->players as $key => $value) {
-			$value->event($event);
+			call_user_func_array(array($value, "event"), func_get_args());
 		}
 
 	} // End of sendPlayerEvent()

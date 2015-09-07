@@ -25,6 +25,16 @@ class Player {
 	var $strategy;
 
 	//
+	// What was rolled?  This is only useful when Taking Odds
+	//
+	var $roll;
+
+	//
+	// How much money is currently on the table?
+	//
+	var $amount_bet;
+
+	//
 	// Keep track of stats for this player.
 	//
 	var $stats;
@@ -41,6 +51,7 @@ class Player {
 
 		$this->logger = $logger;
 		$this->balance = $balance;
+		$this->amount_bet = 0;
 		$this->strategy = $strategy;
 		$this->name = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
 
@@ -59,10 +70,13 @@ class Player {
 	* Process an event that was sent to us.
 	*/
 	function event($event) {
+
 		$this->logger->debug("Received event: $event");
+		$args = func_get_args();
 
 		if ($event == NEW_GAME) {
 			$this->stats["num_games"]++;
+			$this->roll = "";
 		}
 
 		//
@@ -70,14 +84,21 @@ class Player {
 		//
 		if ($event == BET) {
 			$this->placeBet();
+
 		} else if ($event == BET_ODDS) {
+			$roll = $args[1];
+			$this->placeBetOdds($roll);
+
 		}
 
 		if ($event == PLAYER_WIN) {
 			$this->payout();
 			$this->stats["wins"]++;
+
 		} else if ($event == PLAYER_LOSE) {
 			$this->stats["losses"]++;
+			$this->stats["amount_lost"] += $this->amount_bet;
+
 		}
 
 	}
@@ -97,6 +118,7 @@ class Player {
 		}
 
 		$this->balance -= $amount;
+		$this->amount_bet = $amount;
 		$this->logger->info("Placed bet of $${amount} on Pass");
 		return(true);
 
@@ -104,13 +126,63 @@ class Player {
 
 
 	/**
+	* Take odds on the shooter.  We need to keep track of 
+	* what the point number is, since the payout is dependent
+	* on what the point number is.
+	*
+	* @return boolean True if a bet is successfully, placed, false otherwise.
+	*
+	*/
+	function placeBetOdds($roll) {
+
+		if (!$this->strategy["take_odds"]) {
+			return(null);
+		}
+
+		$amount = $this->strategy["bet"];
+		if ($amount > $this->balance) {
+			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out!");
+			return(false);
+		}
+
+		$this->roll = $roll;
+		$this->balance -= $amount;
+		$this->amount_bet += $amount;
+		$this->logger->info("Took odds of $${amount} on point $roll");
+		return(true);
+
+	} // End of placeBetOdds()
+
+
+	/**
 	* Handle payouts for a player that won.
 	*/
 	private function payout() {
 
-		$amount = $this->strategy["bet"] * 2;
+		$bet = $this->strategy["bet"];
+		$amount = $bet * 2;
 		$this->logger->info("Received payout of $${amount}");
 		$this->balance += $amount;
+		$this->stats["amount_won"] += $amount;
+
+		if ($this->strategy["take_odds"] && $this->roll) {
+			if ($this->roll == 4 || $this->roll == 10) {
+				$amount = $bet * (2/1);
+
+			} else if ($this->roll == 5 || $this->roll == 9) {
+				$amount = $bet * (3/2);
+
+			} else if ($this->roll == 6 || $this->roll == 8) {
+				$amount = $bet * (6/5);
+
+			}
+
+			$this->logger->info(sprintf("Oh, we took odds on point of %s as well! Here's an extra $%.2f!", 
+				$this->roll, $amount));
+			$this->balance += $amount;
+			$this->stats["amount_won"] += $amount;
+
+		}
 
 	} // End of payout()
 
