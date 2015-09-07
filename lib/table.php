@@ -43,9 +43,12 @@ class Table {
 	* Our constructor.
 	*
 	* @param object $logger Our logger.
+	* @param integer $num_games How many games to play?
 	*/
-	function __construct($logger) {
+	function __construct($logger, $num_games) {
+
 		$this->logger = $logger;
+		$this->num_games = $num_games;
 		$this->players = array();
 		$this->debug = array();
 
@@ -73,31 +76,61 @@ class Table {
 
 
 	/**
+	* Play a game of craps.
+	*
+	* @return boolean True is returned on success, false is returned
+	*	if we were unable to start the game.
+	*/
+	function play() {
+
+		//
+		// Did we run out of games to play?
+		//
+		if ($this->num_games <= 0) {
+			return(false);
+		}
+
+		while (true) {
+			$roll = $this->roll();
+			if ($roll == TABLE_WIN || $roll == TABLE_LOSE) {
+				break;
+			}	
+		}
+
+		$this->num_games--;
+		return(true);
+
+	} // End of play()
+
+	/**
 	* Make a dice roll.
 	*
-	* @return integer Our roll of dice, between 2 and 12.
+	* @return string Our result.  An empty string is returned 
+	*	if the player neither wins nor loses.  Valid results 
+	*	can be TABLE_WIN or TABLE_LOSE.
+	*
 	*/
-	function roll() {
+	private function roll() {
 
-		$retval = $this->rollDie() + $this->rollDie();
+		$roll = $this->rollDie() + $this->rollDie();
 
 		//
 		// Are we overriding the roll with a debug value?
 		//
 		if (isset($this->debug["rolls"])) {
 			if (count($this->debug["rolls"])) {
-				$retval = array_shift($this->debug["rolls"]);
+				$roll = array_shift($this->debug["rolls"]);
 			}
 		}
 
-		$this->logger->info("Roll: $retval");
+		$this->logger->info("Roll: $roll");
 		$this->stats["num_rolls"]++;
-		$this->stats["dice_rolls"][$retval]++;
+		$this->stats["dice_rolls"][$roll]++;
 
-		$result = $this->checkRoll($retval);
+		$result = $this->checkRoll($roll);
 		$this->updateState($result);
 
-		return($retval);
+		return($result);
 
 	} // End of roll()
 
@@ -149,13 +182,13 @@ class Table {
 			$this->logger->debug("Assigned game ID: " . $this->game_id);
 
 			if (in_array($roll, array(2, 3, 12))) {
-				$this->logger->info("Crapped out");
+				$this->logger->info("Crapped out (Game ID: $this->game_id)");
 				$retval = TABLE_LOSE;
 				$this->stats["losses"]++;
 				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if (in_array($roll, array(7, 11))) {
-				$this->logger->info("Winner!");
+				$this->logger->info("Winner! (Game ID: $this->game_id)");
 				$retval = TABLE_WIN;
 				$this->stats["wins"]++;
 				$this->sendPlayerEvent(PLAYER_WIN);
@@ -173,13 +206,13 @@ class Table {
 			// number again before rolling a 7.	
 			//
 			if ($roll == 7) {
-				$this->logger->info("Out!");
+				$this->logger->info("Out! (Game ID: $this->game_id)");
 				$retval = TABLE_LOSE;
 				$this->stats["losses"]++;
 				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if ($roll == $this->point) {
-				$this->logger->info("Winner!");
+				$this->logger->info("Winner! (Game ID: $this->game_id)");
 				$retval = TABLE_WIN;
 				$this->stats["wins"]++;
 				$this->sendPlayerEvent(PLAYER_WIN);

@@ -10,7 +10,12 @@ Logger::configure("logger-config.xml");
 $logger = Logger::getRootLogger();
 $logger->setLevel(LoggerLevel::getLevelInfo());
 
-$table = new Craps\Table($logger);
+$num_games = 5;
+//$num_games = 3;
+$table = new Craps\Table($logger, $num_games);
+//$table->debugSet("rolls", array(7,7,7));
+//$table->debugSet("rolls", array(7,7,6));
+$table->debugSet("rolls", array(2,7,8,7,8,8,7));
 
 $strategy = array(
 	"bet" => 10,
@@ -24,12 +29,17 @@ foreach ($players as $key => $value) {
 	$table->addPlayer($value);
 }
 
-$num_games = 3;
-$i=1;
+while (true) {
+	$result = $table->play();
+	if (!$result) {
+		break;
+	}
+}
 
+/*
 $game_id = "";
 $game_id_old = "";
-while($i < $num_games) {
+while (true) {
 
 	$table->roll();
 	$game_id = $table->getGameId();
@@ -45,6 +55,7 @@ while($i < $num_games) {
 	}
 
 } // while()...
+*/
 
 
 $logger->info("Table stats: " . json_encode($table->getStats()));
