@@ -1,0 +1,110 @@
+<?php
+
+
+namespace Craps;
+
+
+/**
+* Our stats class.  This is used to creating stats reports on tables 
+* and players.
+*/
+class Stats {
+
+	var $logger;
+	var $table;
+	var $players;
+
+	var $green = "\033[32m";
+	var $yellow = "\033[33m";
+	var $red = "\033[31m";
+	var $default = "\033[39m";
+
+
+	/**
+	* Our constructor.
+	*
+	* @param object $logger Our logger
+	* @param object $table Our table object
+	* @param array $players Our array of players.
+	*/
+	function __construct($logger, $table, $players) {
+
+		$this->logger = $logger;
+		$this->table = $table;
+		$this->players = $players;
+
+	} // End of __construct()
+
+
+	/**
+	* Print out our stats.
+	*/
+	function printStats() {
+
+		$this->printStatsTable($this->table);
+		$this->printStatsPlayers($this->players);
+
+	} // End of printStats()
+
+
+	/**
+	* Print up our stats for the table.
+	*/
+	function printStatsTable($table) {
+
+		$stats = $table->getStats();
+		$dice_rolls = $stats["dice_rolls"];
+		$report = sprintf(""
+			. "Table Stats:\n"
+			. "============\n"
+			. "\n"
+			. "%20s: %5d\n"
+			. "%20s: %5d\n"
+			. "%20s: $this->green%5d$this->default\n"
+			. "%20s: $this->red%5d$this->default\n"
+			. "%20s: \n"
+			. "%20s: %5d    %5s: %5d\n"
+			. "%20s: %5d    %5s: %5d\n"
+			. "%20s: %5d    %5s: %5d\n"
+			. "%20s: %5d    %5s: %5d\n"
+			. "%20s: %5d    %5s: %5d\n"
+			. "%36s: %5d\n"
+			. "\n",
+			"Games Played",
+			$stats["num_games"],
+			"Rolls Made",
+			$stats["num_rolls"],
+			"Wins",
+			$stats["wins"],
+			"Losses",
+			$stats["losses"],
+			"Dice Rolls",
+			2, $dice_rolls[2], 7, $dice_rolls[7],
+			3, $dice_rolls[3], 8, $dice_rolls[8],
+			4, $dice_rolls[4], 9, $dice_rolls[9],
+			5, $dice_rolls[5], 10, $dice_rolls[10],
+			6, $dice_rolls[6], 11, $dice_rolls[11],
+			12, $dice_rolls[12]
+			);
+
+		print $report;
+
+	} // End of printStatsTable()
+
+
+	/**
+	* Print up stats on our players.
+	*/
+	function printStatsPlayers($players) {
+
+		foreach ($players as $key => $value) {
+			$this->logger->info("Player: " . json_encode($value->getStats()));
+		}
+
+	} // End of printStatsPlayer()
+
+
+
+} // End of Stats class
+
+
