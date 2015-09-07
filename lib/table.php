@@ -29,6 +29,11 @@ class Table {
 	var $game_id;
 
 	//
+	// Debugging data used for white-box testing purposes.
+	//
+	var $debug;
+
+	//
 	// Keep track of statistics for this game.
 	//
 	var $stats;
@@ -42,6 +47,7 @@ class Table {
 	function __construct($logger) {
 		$this->logger = $logger;
 		$this->players = array();
+		$this->debug = array();
 
 		$this->stats = array(
 			"num_games" => 0,
@@ -74,6 +80,12 @@ class Table {
 	function roll() {
 
 		$retval = $this->rollDie() + $this->rollDie();
+		if (isset($this->debug["rolls"])) {
+			if (count($this->debug["rolls"])) {
+				$retval = array_shift($this->debug["rolls"]);
+			}
+		}
+
 		$this->logger->info("Roll: $retval");
 		$this->stats["num_rolls"]++;
 		$this->stats["dice_rolls"][$retval]++;
@@ -249,6 +261,13 @@ class Table {
 
 	} // End of sendPlayerEvent()
 
+
+	/**
+	* Set a debug value.
+	*/
+	function debugSet($key, $value) {
+		$this->debug[$key] = $value;
+	}
 
 } // End of Table class
 
