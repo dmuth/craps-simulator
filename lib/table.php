@@ -23,6 +23,7 @@ define("LOSE", "lose");
 class Table {
 
 	var $logger;
+	var $players;
 	var $state;
 	var $point;
 	var $game_id;
@@ -40,6 +41,7 @@ class Table {
 	*/
 	function __construct($logger) {
 		$this->logger = $logger;
+		$this->players = array();
 
 		$this->stats = array(
 			"num_games" => 0,
@@ -61,7 +63,7 @@ class Table {
 				),
 			);
 
-	}
+	} // End of __construct()
 
 
 	/**
@@ -118,6 +120,8 @@ class Table {
 			// This is our come out roll
 			//
 			$this->stats["num_games"]++;
+			$this->sendPlayerEvent(NEW_GAME);
+			$this->sendPlayerEvent(BET);
 
 			//
 			// Assign a UUID to this game.
@@ -132,15 +136,18 @@ class Table {
 				$this->logger->info("Crapped out");
 				$retval = LOSE;
 				$this->stats["losses"]++;
+				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if (in_array($roll, array(7, 11))) {
 				$this->logger->info("Winner!");
 				$retval = WIN;
 				$this->stats["wins"]++;
+				$this->sendPlayerEvent(PLAYER_WIN);
 
 			} else {
 				$this->logger->info("The point is now: $roll");
 				$this->point = $roll;
+				$this->sendPlayerEvent(BET_ODDS);
 
 			}
 
@@ -153,11 +160,13 @@ class Table {
 				$this->logger->info("Out!");
 				$retval = LOSE;
 				$this->stats["losses"]++;
+				$this->sendPlayerEvent(PLAYER_LOSE);
 
 			} else if ($roll == $this->point) {
 				$this->logger->info("Winner!");
 				$retval = WIN;
 				$this->stats["wins"]++;
+				$this->sendPlayerEvent(PLAYER_WIN);
 
 			}
 
@@ -217,6 +226,28 @@ class Table {
 	function getGameId() {
 		return($this->game_id);
 	}
+
+
+	/**
+	* Add a player to the game.
+	*/
+	function addPlayer($player) {
+		$this->players[] = $player;
+	} // End of addPlayer()
+
+
+	/**
+	* Send an event to all players
+	*
+	* @param string $event The event to send to each player
+	*/
+	function sendPlayerEvent($event) {
+
+		foreach ($this->players as $key => $value) {
+			$value->event($event);
+		}
+
+	} // End of sendPlayerEvent()
 
 
 } // End of Table class
