@@ -88,6 +88,16 @@ class Player {
 		}
 
 		if ($event == PLAYER_NEW_GAME) {
+
+			if ($this->strategy["bet"] > $this->balance) {
+				$this->logger->info(sprintf("Our balance (%.2f) can't cover betting %d, bailing out!", 
+				$this->balance, $this->strategy["bet"]
+				));
+				$this->bankrupt = true;
+				return(false);
+			}
+
+
 			$this->stats["num_games"]++;
 			$this->roll = "";
 		}
@@ -123,11 +133,6 @@ class Player {
 	private function placeBet() {
 
 		$amount = $this->strategy["bet"];
-		if ($amount > $this->balance) {
-			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out!");
-			$this->bankrupt = true;
-			return(false);
-		}
 
 		$this->balance -= $amount;
 		$this->amount_bet = $amount;
