@@ -43,14 +43,13 @@ class Args {
 
 			->flag("players")
 			->describedAs("Create a player with a comma-delimited list of the following attributes:"
-				. "starting_balance,bet_amount[,taking_odds]\n"
-				. "Multiple players can be separated by colons.\n\n"
-				. "Example: 100,10,1 or 100,25\n"
-				. "Exmaple with two players: 100,10,1:100,25,1"
+				. "starting_balance,bet_amount[,taking_odds[,bail-at]]\n"
+				. "- taking_odds means placing an additional wager on the point number\n"
+				. "- bail-at means to quit the game after reaching a certain balance\n"
+				. "- Multiple players can be separated by colons.\n\n"
+				. "Example: 100,10,1 or 100,25,0,150\n"
+				. "Exmaple with two players: 100,10,1:100,25,1,500"
 				)
-
-			->flag("bail-at")
-			->describedAs("Quit the game when we reach the specified balance")
 
 			->flag("debug-rolls")
 			->describedAs("Comman-delimited list of dice rolls to insert for debugging purposes.\n"
@@ -63,7 +62,6 @@ class Args {
 			$retval["vv"] = $args["vv"];
 			$retval["num-games"] = $args["num-games"];
 			$retval["debug-rolls"] = $args["debug-rolls"];
-			$retval["bail-at"] = $args["bail-at"];
 			$retval["players"] = $args["players"];
 
 			$retval = $this->processArgs($retval);
@@ -137,14 +135,27 @@ class Args {
 
 			$row = array();
 			$row["balance"] = $player[0];
+
 			$strategy = array();
 			$strategy["bet"] = $player[1];
+			$strategy["take_odds"] = false;
+			//
+			// Set the bail_at number to something impossibly high by default.
+			//
+			$strategy["bail_at"] = 999999999;
 
 			//
 			// Are we taking odds?
 			//
 			if (isset($player[2])) {
 				$strategy["take_odds"] = true;
+			}
+
+			//
+			// Are we bailing?
+			//
+			if (isset($player[3])) {
+				$strategy["bail_at"] = $player[3];
 			}
 
 			$row["strategy"] = $strategy;
