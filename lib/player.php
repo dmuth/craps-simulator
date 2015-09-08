@@ -162,7 +162,7 @@ class Player {
 	*/
 	private function placeBetOdds($roll) {
 
-		if (!$this->strategy["take_odds"]) {
+		if (!isset($this->strategy["take_odds"])) {
 			return(null);
 		}
 
@@ -192,7 +192,7 @@ class Player {
 		$this->balance += $bet + $winnings;
 		$this->stats["amount_won"] += $winnings;
 
-		if ($this->strategy["take_odds"] && $this->roll) {
+		if (isset($this->strategy["take_odds"]) && $this->roll) {
 			if ($this->roll == 4 || $this->roll == 10) {
 				$winnings = ($bet * (2/1)) - $bet;
 
