@@ -40,9 +40,11 @@ class Player {
 	var $stats;
 
 	//
-	// Set to true if we have too little money to place any bets
+	// Set to true if we should stop playing.
+	// Possible reasons include bankruptcy or bailing out at a certain balance.
 	//
-	var $bankrupt;
+	var $stop_playing;
+
 
 
 	/**
@@ -85,7 +87,7 @@ class Player {
 		// If we're bankrupt, full stop here.  We shouldn't process any 
 		// events after this, as they all relate to gameplay.
 		//
-		if ($this->bankrupt) {
+		if ($this->stop_playing) {
 			return(null);
 		}
 
@@ -122,11 +124,11 @@ class Player {
 	private function newGame() {
 
 		if ($this->strategy["bet"] > $this->balance) {
-			$this->logger->info(sprintf("Our balance (%.2f) can't cover betting %d, bailing out!", 
+			$this->logger->info(sprintf("Our balance (%.2f) can't cover betting %d, we're bankrupt!", 
 			$this->balance, $this->strategy["bet"]
 			));
 
-			$this->bankrupt = true;
+			$this->stop_playing = true;
 			return(false);
 
 		}
