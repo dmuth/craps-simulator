@@ -2,32 +2,51 @@
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
+include("lib/args.php");
 include("lib/table.php");
 include("lib/player.php");
 include("lib/stats.php");
 
+$args = new Craps\Args();
+$config = $args->parse();
+print_r($config); // Debugging
+
+//
+// Set up logging.
+//
 Logger::configure("logger-config.xml");
-//$logger = Logger::getLogger("main");
 $logger = Logger::getRootLogger();
-$logger->setLevel(LoggerLevel::getLevelInfo());
+if ($config["vv"]) {
+	$logger->setLevel(LoggerLevel::getLevelDebug());
 
+} else if ($config["v"]) {
+	$logger->setLevel(LoggerLevel::getLevelInfo());
+
+} else {
+	$logger->setLevel(LoggerLevel::getLevelError());
+
+}
+
+//
+// Set up our table
+//
 $table = new Craps\Table($logger);
-//$num_games = 1; $table->debugSet("rolls", array(2));
-//$num_games = 1; $table->debugSet("rolls", array(4,7)); // Take odds, lose
-$num_games = 1; $table->debugSet("rolls", array(4,4)); // Take odds, win
-//$num_games = 2; $table->debugSet("rolls", array(2,7));
-//$num_games = 3; $table->debugSet("rolls", array(2,7,8,7));
-//$num_games = 4; $table->debugSet("rolls", array(2,7,8,7,8,8));
-//$num_games = 5; $table->debugSet("rolls", array(2,7,8,7,8,8,7));
+$num_games = $config["num-games"];
 
-$strategy = array(
-	"bet" => 10,
-	"take_odds" => true,
-	);
+//
+// Add in our debugging rolls (if we have any)
+//
+if ($config["debug-rolls"]) {
+		$table->debugSet("rolls", $config["debug-rolls"]);
+}
 
+//
+// Create our players.
+//
 $players = array();
-$players[] = new Craps\Player($logger, 100, $strategy);
-//$players[] = new Craps\Player($logger, 1000, $strategy);
+foreach ($config["players"] as $key => $value) {
+	$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
+}
 
 foreach ($players as $key => $value) {
 	$table->addPlayer($value);
