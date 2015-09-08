@@ -9,7 +9,7 @@ include("lib/stats.php");
 
 $args = new Craps\Args();
 $config = $args->parse();
-print_r($config); // Debugging
+//print_r($config); // Debugging
 
 //
 // Set up logging.
