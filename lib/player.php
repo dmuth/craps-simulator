@@ -133,6 +133,15 @@ class Player {
 
 		}
 
+		if ($this->balance >= $this->stats["strategy"]["bail_at"]) {
+			$this->logger->info(sprintf(
+				"Our balance (%.2f) is at our bail_at amount of %.2f, we're done here!", 
+				$this->balance, $this->stats["strategy"]["bail_at"]));
+			$this->stop_playing = true;
+			return(false);
+		}
+
+
 		$this->stats["num_games"]++;
 		$this->roll = "";
 
