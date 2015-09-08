@@ -42,8 +42,8 @@ class Args {
 			->describedAs("How many games to play?")
 
 			->flag("players")
-			->describedAs("Create a player with a comma-delimited list of the following attributes:"
-				. "starting_balance,bet_amount[,taking_odds[,bail-at]]\n"
+			->describedAs("Create a player with a comma-delimited list in the following format:\n"
+				. "\tstarting_balance,bet_amount[,taking_odds[,bail-at]]\n\n"
 				. "- taking_odds means placing an additional wager on the point number\n"
 				. "- bail-at means to quit the game after reaching a certain balance\n"
 				. "- Multiple players can be separated by colons.\n\n"
