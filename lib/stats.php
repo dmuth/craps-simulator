@@ -110,12 +110,16 @@ class Stats {
 				. "%15s: %10d\n"
 				. "%15s: %10d\n"
 				. "%15s: %10d\n"
+				. "%15s: %10d\n"
+				. "%15s: %10d\n"
 				. "%15s: $this->green%10.2f$this->default\n"
 				. "%15s: $this->red%10.2f$this->default\n"
 				. "%15s: %10.2f\n"
 				. "\n",
 				"Name", $stats["name"],
 				"Games Played", $stats["stats"]["num_games"],
+				"Bet", $stats["stats"]["strategy"]["bet"],
+				"Took Odds?", $stats["stats"]["strategy"]["take_odds"],
 				"Wins", $stats["stats"]["wins"],
 				"Losses", $stats["stats"]["losses"],
 				"Amount Won", $stats["stats"]["amount_won"],
