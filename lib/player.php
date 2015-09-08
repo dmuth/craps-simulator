@@ -66,7 +66,9 @@ class Player {
 			"losses" => 0,
 			"amount_won" => 0,
 			"amount_lost" => 0,
+			"strategy" => $strategy,
 			);
+
 
 	}
 
