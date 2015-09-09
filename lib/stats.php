@@ -120,7 +120,7 @@ class Stats {
 				"Name", $stats["name"],
 				"Games Played", $stats["stats"]["num_games"],
 				"Bet", $stats["stats"]["strategy"]["bet"],
-				"Took Odds?", isset($stats["stats"]["strategy"]["take_odds"]),
+				"Took Odds?", $stats["stats"]["strategy"]["take_odds"],
 				"Bail At", $stats["stats"]["strategy"]["bail_at"],
 				"Wins", $stats["stats"]["wins"],
 				"Losses", $stats["stats"]["losses"],
