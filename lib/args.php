@@ -148,7 +148,9 @@ class Args {
 			// Are we taking odds?
 			//
 			if (isset($player[2])) {
-				$strategy["take_odds"] = true;
+				if ($player[2]) {
+					$strategy["take_odds"] = true;
+				}
 			}
 
 			//
