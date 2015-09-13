@@ -1,7 +1,7 @@
 
 I'm traveling to Vegas for a conference, and since I'm not much of a gambler,  I decided to write a craps simulator so that I could test betting strategies in the game.
 
-I also wrote this as an experience in creating a software architecture which is event-driven.
+I also wrote this to gain a little experience in creating a software architecture which is event-driven from the ground up.
 
 
 # Requirements
