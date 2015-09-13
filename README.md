@@ -29,6 +29,11 @@ I also wrote this to gain a little experience in creating a software architectur
 - `-vv` Really verbose mode. Logging will be done at the DEBUG level.
 - `--debug-roll` Used to force the first dice rolls to be pre-detrmined.  This is useful for whitebox testing.
 
+
+A successful will produce results similar this:
+(img/craps-results.png)
+
+
 # FAQ
 
 ## Why aren't other bets supported?
