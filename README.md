@@ -31,7 +31,7 @@ I also wrote this to gain a little experience in creating a software architectur
 
 
 A successful will produce results similar this:
-(img/craps-results.png)
+![Craps Results](img/craps-results.png)
 
 
 # FAQ
