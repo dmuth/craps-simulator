@@ -47,7 +47,9 @@ Because betting against the shooter is considered a dick move at the craps table
 
 ## If I run a simulation long enough, I eventually lose all of my money.  Why?
 
-Becaue the house has an edge in craps, the same as they do in just about every other game.  That is--if you gamble long enough you will lose all of your money.  You may want to consider the implications of this before setting foot in a casino.
+> *Because the house always wins. Play long enough, you never change the stakes. The house takes you. Unless, when that perfect hand comes along, you bet and you bet big, then you take the house.*  -- Daniel Ocean
+
+Craps is no different from any other game in a casino--the house has an edge. If you gamble long enough you *will* lose all of your money.  You may want to consider this before setting foot in a casino.
 
 
 # Contact
