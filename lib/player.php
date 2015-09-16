@@ -175,7 +175,7 @@ class Player {
 	*/
 	private function placeBetOdds($roll) {
 
-		if (!$this->strategy["take_odds"]) {
+		if (!isset($this->strategy["take_odds"])) {
 			return(null);
 		}
 
