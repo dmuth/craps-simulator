@@ -2,6 +2,7 @@
     "require": {
         "apache/log4php": "~2.3",
         "ramsey/uuid": "~2.8",
-        "nategood/commando": "0.2.*"
+        "nategood/commando": "0.2.*",
+        "phpunit/phpunit": "~4.8"
     }
 }
