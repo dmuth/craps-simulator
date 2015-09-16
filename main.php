@@ -44,8 +44,10 @@ if ($config["debug-rolls"]) {
 // Create our players.
 //
 $players = array();
-foreach ($config["players"] as $key => $value) {
-	$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
+if (isset($config["players"])) {
+	foreach ($config["players"] as $key => $value) {
+		$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
+	}
 }
 
 foreach ($players as $key => $value) {
