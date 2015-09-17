@@ -34,7 +34,7 @@ class PlayerTest extends PHPUnit_Framework_TestCase {
 		$player->event(PLAYER_LOSE);
 		$this->assertEquals($player->getStats()["balance"], 100);
 
-    } // End of testHello()
+    } // End of testPlayer()
 
 
 	public function testPlayerOdds() {
@@ -67,8 +67,37 @@ class PlayerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($player->getStats()["balance"], 80);
 		$player->event(PLAYER_WIN);
 		$this->assertEquals($player->getStats()["balance"], 120);
+
+		//
+		// Test with a multiple
+		//
+		$strategy["take_odds"] = 3;
+
+		$player = new Craps\Player($this->logger, 100, $strategy);
+		$player->event(PLAYER_BET);
+		$this->assertEquals($player->getStats()["balance"], 90);
+		$player->event(PLAYER_BET_ODDS, 6);
+		$this->assertEquals($player->getStats()["balance"], 60);
+		$player->event(PLAYER_WIN);
+		$this->assertEquals($player->getStats()["balance"], 116);
 		
-	}
+		$player = new Craps\Player($this->logger, 100, $strategy);
+		$player->event(PLAYER_BET);
+		$this->assertEquals($player->getStats()["balance"], 90);
+		$player->event(PLAYER_BET_ODDS, 5);
+		$this->assertEquals($player->getStats()["balance"], 60);
+		$player->event(PLAYER_WIN);
+		$this->assertEquals($player->getStats()["balance"], 125);
+		
+		$player = new Craps\Player($this->logger, 100, $strategy);
+		$player->event(PLAYER_BET);
+		$this->assertEquals($player->getStats()["balance"], 90);
+		$player->event(PLAYER_BET_ODDS, 4);
+		$this->assertEquals($player->getStats()["balance"], 60);
+		$player->event(PLAYER_WIN);
+		$this->assertEquals($player->getStats()["balance"], 140);
+
+	} // End of testPlayerOdds()
 
 
 } // End of PlayerTest class

@@ -44,7 +44,8 @@ class Args {
 			->flag("players")
 			->describedAs("Create a player with a comma-delimited list in the following format:\n"
 				. "\tstarting_balance,bet_amount[,taking_odds[,bail-at]]\n\n"
-				. "- taking_odds means placing an additional wager on the point number\n"
+				. "- taking_odds means placing an additional wager on the point number. \n"
+				. "\t0 means no taking of odds, a positive integer is the multiplier of the original bet.\n"
 				. "- bail-at means to quit the game after reaching a certain balance\n"
 				. "- Multiple players can be separated by colons.\n\n"
 				. "Example: 100,10,1 or 100,25,0,150\n"

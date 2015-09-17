@@ -186,7 +186,7 @@ class Player {
 			return(null);
 		}
 
-		$amount = $this->strategy["bet"];
+		$amount = $this->strategy["bet"] * $this->strategy["take_odds"];
 		if ($amount > $this->balance) {
 			$this->logger->info("Our balance ($this->balance) can't cover betting $amount, bailing out! (Player $this->name)");
 			return(false);
@@ -213,20 +213,23 @@ class Player {
 		$this->stats["amount_won"] += $winnings;
 
 		if (isset($this->strategy["take_odds"]) && $this->roll) {
+
+				$take_odds_bet = $this->strategy["bet"] * $this->strategy["take_odds"];
+
 			if ($this->roll == 4 || $this->roll == 10) {
-				$winnings = ($bet * (2/1)) - $bet;
+				$winnings = ($take_odds_bet * (2/1)) - $take_odds_bet;
 
 			} else if ($this->roll == 5 || $this->roll == 9) {
-				$winnings = ($bet * (3/2)) - $bet;
+				$winnings = ($take_odds_bet * (3/2)) - $take_odds_bet;
 
 			} else if ($this->roll == 6 || $this->roll == 8) {
-				$winnings = ($bet * (6/5)) - $bet;
+				$winnings = ($take_odds_bet * (6/5)) - $take_odds_bet;
 
 			}
 
 			$this->logger->info(sprintf("Oh, we took odds on point of %s as well! Here's an extra $%.2f! (Player $this->name)", 
 				$this->roll, $winnings));
-			$this->balance += $bet + $winnings;
+			$this->balance += $take_odds_bet + $winnings;
 			$this->stats["amount_won"] += $winnings;
 
 		}
