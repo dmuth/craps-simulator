@@ -25,6 +25,12 @@ class Player {
 	var $strategy;
 
 	//
+	// Our player ID, which is incremented with each new player
+	//
+	static protected $id = 0;
+
+
+	//
 	// What was rolled?  This is only useful when Taking Odds
 	//
 	var $roll;
@@ -60,7 +66,8 @@ class Player {
 		$this->balance = $balance;
 		$this->amount_bet = 0;
 		$this->strategy = $strategy;
-		$this->name = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
+		self::$id++;
+		$this->name = "Player #" . self::$id;
 
 		$this->stats = array(
 			"num_games" => 0,
