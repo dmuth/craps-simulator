@@ -150,7 +150,7 @@ class Args {
 			//
 			if (isset($player[2])) {
 				if ($player[2]) {
-					$strategy["take_odds"] = true;
+					$strategy["take_odds"] = $player[2];
 				}
 			}
 
