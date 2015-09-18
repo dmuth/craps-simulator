@@ -14,5 +14,5 @@ echo
 #
 # Now do a test run
 #
-./main.php --players 1000,10,0,1100:1000,10,1,1100
+./main.php --players 1000,10,0,1100:1000,10,1,1100:1000,10,5,1100
 
