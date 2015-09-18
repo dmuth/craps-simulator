@@ -49,7 +49,7 @@ class Args {
 				. "- bail-at means to quit the game after reaching a certain balance\n"
 				. "- Multiple players can be separated by colons.\n\n"
 				. "Example: 100,10,1 or 100,25,0,150\n"
-				. "Exmaple with two players: 100,10,1:100,25,1,500"
+				. "Example with two players: 100,10,1:100,25,1,500"
 				)
 
 			->flag("debug-rolls")
