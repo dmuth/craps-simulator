@@ -23,7 +23,7 @@ I also wrote this to gain a little experience in creating a software architectur
 - `--players` Used to specify one or more players.  The syntax is: balance,bet_amonut,take_odds,bail_out_at
     - balance - Starting balance
     - bet_amount - How much to bet per bet.  The only bet supported at this time is Pass.
-    - take_odds - Take odds if a point has been established?  Valid values are 0 and 1.
+    - take_odds - Take odds if a point has been established?  0 to not take odds, any positive integer to take odds with a multiple of the original bet
     - bail_out_at - Leave the game when we reach this number.
 - `-v` Verbose mode.  Logging will be done at the INFO level.
 - `-vv` Really verbose mode. Logging will be done at the DEBUG level.
