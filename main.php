@@ -52,10 +52,15 @@ function runEpoch($logger, $config) {
 	// Create our players.
 	//
 	$players = array();
+
 	if (isset($config["players"])) {
+
+		Craps\Player::resetId();
+
 		foreach ($config["players"] as $key => $value) {
 			$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
 		}
+
 	}
 
 	foreach ($players as $key => $value) {

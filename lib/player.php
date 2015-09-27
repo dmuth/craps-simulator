@@ -83,6 +83,14 @@ class Player {
 
 
 	/**
+	* Reset our ID.  This should be called at the start of a new Epoch.
+	*/
+	static function resetId() {
+		self::$id = 0;
+	}
+
+
+	/**
 	* Process an event that was sent to us.
 	*/
 	function event($event) {
