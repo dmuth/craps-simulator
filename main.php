@@ -54,10 +54,14 @@ foreach ($players as $key => $value) {
 	$table->addPlayer($value);
 }
 
-$result = $table->play($num_games);
+$result = $table->play($num_games, $epoch_id);
 
 $stats = new Craps\Stats($logger, $table, $players);
-$stats->printStats();
+
+if (!$config["no-output"]) {
+	$stats->printStats();
+}
+
 if ($config["output-kv"]) {
 	$stats->printStatsKv();
 }

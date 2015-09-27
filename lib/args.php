@@ -62,6 +62,10 @@ class Args {
 			->describedAs("Print results of the game in key=value format")
 			->boolean()
 
+			->flag("no-output")
+			->describedAs("Don't print regular stats output. (but KV output can still be printed if specified")
+			->boolean()
+
 			;
 
 			$retval["v"] = $args["v"];
@@ -70,6 +74,7 @@ class Args {
 			$retval["debug-rolls"] = $args["debug-rolls"];
 			$retval["players"] = $args["players"];
 			$retval["output-kv"] = $args["output-kv"];
+			$retval["no-output"] = $args["no-output"];
 
 			$retval = $this->processArgs($retval);
 

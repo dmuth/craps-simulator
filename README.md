@@ -29,7 +29,7 @@ I also wrote this to gain a little experience in creating a software architectur
 - `-vv` Really verbose mode. Logging will be done at the DEBUG level.
 - `--debug-roll` Used to force the first dice rolls to be pre-detrmined.  This is useful for whitebox testing.
 - `--output-kv` Print results of the game in key=value format
-
+- `--no-output` Don't print regular stats output. (but KV output can still be printed if specified)
 
 A successful will produce results similar this:
 

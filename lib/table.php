@@ -43,6 +43,7 @@ class Table {
 	* Our constructor.
 	*
 	* @param object $logger Our logger.
+	*
 	*/
 	function __construct($logger) {
 
