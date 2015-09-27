@@ -27,10 +27,12 @@ if ($config["vv"]) {
 
 }
 
+$epoch_id = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
+
 //
 // Set up our table
 //
-$table = new Craps\Table($logger);
+$table = new Craps\Table($logger, $epoch_id);
 $num_games = $config["num-games"];
 
 //
