@@ -136,6 +136,99 @@ class Stats {
 	} // End of printStatsPlayer()
 
 
+	/**
+	* Print stats in key=value format
+	*/
+	function printStatsKv() {
+		$this->printStatsTableKv($this->table);
+		$this->printStatsPlayersKv($this->players);
+	} // End of printStatsKv()
+
+
+	/**
+	* Print up our stats for the table.
+	*/
+	function printStatsTableKv($table) {
+
+		$stats = $table->getStats();
+		$dice_rolls = $stats["dice_rolls"];
+
+		$report = sprintf("KV: "
+			. "\ttype=table"
+			. "\tnum_games=%d"
+			. "\tnum_rolls=%d"
+			. "\twins=%d"
+			. "\tlosses=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\tdice_roll_%d=%d"
+			. "\n",
+			$stats["num_games"],
+			$stats["num_rolls"],
+			$stats["wins"],
+			$stats["losses"],
+			2, $dice_rolls[2], 7, $dice_rolls[7],
+			3, $dice_rolls[3], 8, $dice_rolls[8],
+			4, $dice_rolls[4], 9, $dice_rolls[9],
+			5, $dice_rolls[5], 10, $dice_rolls[10],
+			6, $dice_rolls[6], 11, $dice_rolls[11],
+			12, $dice_rolls[12]
+			);
+		print $report;
+
+	} // End of printStatsTableKv()
+
+
+	/**
+	* Print up stats on our players.
+	*/
+	function printStatsPlayersKv($players) {
+
+		$report = "";
+
+		foreach ($players as $key => $value) {
+			//$this->logger->info("Player: " . json_encode($value->getStats()));
+			$stats = $value->getStats();
+
+			$report .= sprintf("KV: "
+				. "\ttype=player"
+				. "\tname=\"%s\""
+				. "\tnum_games=%s"
+				. "\tbet=%s"
+				. "\ttake_odds=%s"
+				. "\tbail_at=%s"
+				. "\twins=%s"
+				. "\tlosses=%s"
+				. "\tamount_won=%s"
+				. "\tamount_lost=%s"
+				. "\tbalance=%s"
+				. "\n",
+				$stats["name"],
+				$stats["stats"]["num_games"],
+				$stats["stats"]["strategy"]["bet"],
+				$stats["stats"]["strategy"]["take_odds"],
+				$stats["stats"]["strategy"]["bail_at"],
+				$stats["stats"]["wins"],
+				$stats["stats"]["losses"],
+				$stats["stats"]["amount_won"],
+				$stats["stats"]["amount_lost"],
+				$stats["balance"]
+				);
+
+		}
+
+		print $report;
+
+	} // End of printStatsPlayerKv()
+
+
 } // End of Stats class
 
 

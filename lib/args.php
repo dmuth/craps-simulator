@@ -57,6 +57,11 @@ class Args {
 				. "Additional dice rolls (if any) will be random.\n\n"
 				. "Example: 7,2,8,8"
 				)
+
+			->flag("output-kv")
+			->describedAs("Print results of the game in key=value format")
+			->boolean()
+
 			;
 
 			$retval["v"] = $args["v"];
@@ -64,6 +69,7 @@ class Args {
 			$retval["num-games"] = $args["num-games"];
 			$retval["debug-rolls"] = $args["debug-rolls"];
 			$retval["players"] = $args["players"];
+			$retval["output-kv"] = $args["output-kv"];
 
 			$retval = $this->processArgs($retval);
 
