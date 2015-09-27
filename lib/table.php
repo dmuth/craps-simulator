@@ -44,14 +44,17 @@ class Table {
 	*
 	* @param object $logger Our logger.
 	*
+	* @param string $epoch_id Our Epoch ID.  Used to uniquely identify the table's series of games.
+	*
 	*/
-	function __construct($logger) {
+	function __construct($logger, $epoch_id) {
 
 		$this->logger = $logger;
 		$this->players = array();
 		$this->debug = array();
 
 		$this->stats = array(
+			"epoch_id" => $epoch_id,
 			"num_games" => 0,
 			"num_rolls" => 0,
 			"wins" => 0,

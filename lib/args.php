@@ -66,6 +66,9 @@ class Args {
 			->describedAs("Don't print regular stats output. (but KV output can still be printed if specified")
 			->boolean()
 
+			->flag("num-epochs")
+			->describedAs("How many epochs do we want to run? One epoch is a round of games. (Default: 1)")
+
 			;
 
 			$retval["v"] = $args["v"];
@@ -75,6 +78,7 @@ class Args {
 			$retval["players"] = $args["players"];
 			$retval["output-kv"] = $args["output-kv"];
 			$retval["no-output"] = $args["no-output"];
+			$retval["num-epochs"] = $args["num-epochs"];
 
 			$retval = $this->processArgs($retval);
 
@@ -93,6 +97,13 @@ class Args {
 	function processArgs($in) {
 
 		$retval = $in;
+
+		//
+		// Default number of epochs.
+		//
+		if (!$retval["num-epochs"]) {
+			$retval["num-epochs"] = 1;
+		}
 
 		//
 		// Default number of games.

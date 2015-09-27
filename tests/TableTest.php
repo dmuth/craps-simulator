@@ -18,7 +18,7 @@ class TableTest extends PHPUnit_Framework_TestCase {
 
 	public function testTable() {
 
-		$table = new Craps\Table($this->logger);
+		$table = new Craps\Table($this->logger, "test_ID");
 
 		$strategy = array(
 			"bet" => 10,

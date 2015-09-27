@@ -27,45 +27,61 @@ if ($config["vv"]) {
 
 }
 
-$epoch_id = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
 
-//
-// Set up our table
-//
-$table = new Craps\Table($logger, $epoch_id);
-$num_games = $config["num-games"];
+/**
+* Run an entire Epoch.
+*/
+function runEpoch($logger, $config) {
 
-//
-// Add in our debugging rolls (if we have any)
-//
-if ($config["debug-rolls"]) {
-		$table->debugSet("rolls", $config["debug-rolls"]);
-}
+	$epoch_id = \Rhumsaa\Uuid\Uuid::uuid4()->toString();
 
-//
-// Create our players.
-//
-$players = array();
-if (isset($config["players"])) {
-	foreach ($config["players"] as $key => $value) {
-		$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
+	//
+	// Set up our table
+	//
+	$table = new Craps\Table($logger, $epoch_id);
+	$num_games = $config["num-games"];
+
+	//
+	// Add in our debugging rolls (if we have any)
+	//
+	if ($config["debug-rolls"]) {
+			$table->debugSet("rolls", $config["debug-rolls"]);
 	}
-}
 
-foreach ($players as $key => $value) {
-	$table->addPlayer($value);
-}
+	//
+	// Create our players.
+	//
+	$players = array();
+	if (isset($config["players"])) {
+		foreach ($config["players"] as $key => $value) {
+			$players[] = new Craps\Player($logger, $value["balance"], $value["strategy"]);
+		}
+	}
 
-$result = $table->play($num_games, $epoch_id);
+	foreach ($players as $key => $value) {
+		$table->addPlayer($value);
+	}
 
-$stats = new Craps\Stats($logger, $table, $players);
+	$result = $table->play($num_games, $epoch_id);
 
-if (!$config["no-output"]) {
-	$stats->printStats();
-}
+	$stats = new Craps\Stats($logger, $table, $players);
 
-if ($config["output-kv"]) {
-	$stats->printStatsKv();
+	if (!$config["no-output"]) {
+		$stats->printStats();
+	}
+
+	if ($config["output-kv"]) {
+		$stats->printStatsKv();
+	}
+
+} // End of runEpoch()
+
+
+//
+// Run through our Epochs
+//
+for ($i=0; $i<$config["num-epochs"]; $i++) {
+	runEpoch($logger, $config);
 }
 
 print "All done!\n";

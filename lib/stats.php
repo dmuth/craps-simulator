@@ -140,8 +140,10 @@ class Stats {
 	* Print stats in key=value format
 	*/
 	function printStatsKv() {
+
 		$this->printStatsTableKv($this->table);
-		$this->printStatsPlayersKv($this->players);
+		$this->printStatsPlayersKv($this->table, $this->players);
+
 	} // End of printStatsKv()
 
 
@@ -155,6 +157,7 @@ class Stats {
 
 		$report = sprintf("KV: "
 			. "\ttype=table"
+			. "\tepoch_id=\"%s\""
 			. "\tnum_games=%d"
 			. "\tnum_rolls=%d"
 			. "\twins=%d"
@@ -170,6 +173,7 @@ class Stats {
 			. "\tdice_roll_%d=%d"
 			. "\tdice_roll_%d=%d"
 			. "\n",
+			$stats["epoch_id"],
 			$stats["num_games"],
 			$stats["num_rolls"],
 			$stats["wins"],
@@ -189,16 +193,18 @@ class Stats {
 	/**
 	* Print up stats on our players.
 	*/
-	function printStatsPlayersKv($players) {
+	function printStatsPlayersKv($table, $players) {
 
 		$report = "";
 
 		foreach ($players as $key => $value) {
 			//$this->logger->info("Player: " . json_encode($value->getStats()));
 			$stats = $value->getStats();
+			$table_stats = $table->getStats();
 
 			$report .= sprintf("KV: "
 				. "\ttype=player"
+				. "\tepoch_id=\"%s\""
 				. "\tname=\"%s\""
 				. "\tnum_games=%s"
 				. "\tbet=%s"
@@ -210,6 +216,7 @@ class Stats {
 				. "\tamount_lost=%s"
 				. "\tbalance=%s"
 				. "\n",
+				$table_stats["epoch_id"],
 				$stats["name"],
 				$stats["stats"]["num_games"],
 				$stats["stats"]["strategy"]["bet"],
@@ -226,7 +233,7 @@ class Stats {
 
 		print $report;
 
-	} // End of printStatsPlayerKv()
+	} // End of printStatsPlayersKv()
 
 
 } // End of Stats class

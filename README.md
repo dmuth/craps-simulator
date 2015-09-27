@@ -20,6 +20,7 @@ I also wrote this to gain a little experience in creating a software architectur
 `./main.php --players [balance,bet_amount[,take_odds[,bail_out_at]][:player2[:...]]] [--num-games num] [-v] [-vv] [--debug-roll [roll[,roll[,...]]]]`
 
 - `--num-games` How many games to play?  10 is the default.
+- `--num-epochs` How many epochs do we want to run? One epoch is a round of games. (Default: 1)
 - `--players` Used to specify one or more players.  The syntax is: balance,bet_amonut,take_odds,bail_out_at
     - balance - Starting balance
     - bet_amount - How much to bet per bet.  The only bet supported at this time is Pass.
